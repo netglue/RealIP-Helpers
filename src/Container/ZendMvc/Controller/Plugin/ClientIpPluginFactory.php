@@ -7,7 +7,7 @@ use NetglueRealIP\Helper\ClientIPFromSuperGlobals;
 use NetglueRealIP\ZendMvc\Controller\Plugin\ClientIP;
 use Psr\Container\ContainerInterface;
 
-class ClientIPFactory
+class ClientIpPluginFactory
 {
     public function __invoke(ContainerInterface $container) : ClientIP
     {

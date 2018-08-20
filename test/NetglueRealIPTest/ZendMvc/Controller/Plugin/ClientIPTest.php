@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace NetglueRealIPTest\ZendMvc\Controller\Plugin;
 
-use NetglueRealIP\Container\ZendMvc\Controller\Plugin\ClientIPFactory;
+use NetglueRealIP\Container\ZendMvc\Controller\Plugin\ClientIpPluginFactory;
 use NetglueRealIP\Helper\ClientIPFromSuperGlobals;
 use NetglueRealIP\ZendMvc\Controller\Plugin\ClientIP;
 use NetglueRealIPTest\TestCase;
@@ -38,7 +38,7 @@ class ClientIPTest extends TestCase
     {
         $container = $this->prophesize(ContainerInterface::class);
         $container->get(ClientIPFromSuperGlobals::class)->willReturn(new ClientIPFromSuperGlobals());
-        $factory = new ClientIPFactory();
+        $factory = new ClientIpPluginFactory();
         $plugin = $factory($container->reveal());
         $this->assertInstanceOf(ClientIP::class, $plugin);
     }

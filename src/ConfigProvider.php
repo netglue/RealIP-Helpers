@@ -29,14 +29,16 @@ class ConfigProvider
 
     public function getZendMvcControllerPluginConfig() : array
     {
+        // @codingStandardsIgnoreStart
         return [
             'factories' => [
-                ZendMvc\Controller\Plugin\ClientIP::class => Container\ZendMvc\Controller\Plugin\ClientIPFactory::class,
+                ZendMvc\Controller\Plugin\ClientIP::class => Container\ZendMvc\Controller\Plugin\ClientIpPluginFactory::class,
             ],
             'aliases' => [
                 'clientIp' => ZendMvc\Controller\Plugin\ClientIP::class
             ],
         ];
+        // @codingStandardsIgnoreEnd
     }
 
     public function getProxyHeaderSetup() : array
