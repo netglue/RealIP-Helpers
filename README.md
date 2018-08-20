@@ -1,5 +1,11 @@
 # Helpers for retrieving the real client IP in Zend Projects
 
+[![Latest Stable Version](https://poser.pugx.org/netglue/realip-helpers/version)](https://packagist.org/packages/netglue/realip-helpers)
+[![Coverage Status](https://coveralls.io/repos/github/netglue/RealIP-Helpers/badge.svg)](https://coveralls.io/github/netglue/RealIP-Helpers)
+[![Build Status](https://travis-ci.org/netglue/RealIP-Helpers.svg?branch=master)](https://travis-ci.org/netglue/RealIP-Helpers)
+[![Maintainability](https://api.codeclimate.com/v1/badges/1b1d79eb6c32e717413c/maintainability)](https://codeclimate.com/github/netglue/RealIP-Helpers/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/1b1d79eb6c32e717413c/test_coverage)](https://codeclimate.com/github/netglue/RealIP-Helpers/test_coverage)
+
 ## Why?
 
 I put this together to scratch an itch - I typically write server-side apps using zend expressive or zend framework and
@@ -21,7 +27,7 @@ Install with composer using `"netglue/realip-helpers"`
 
 Without any additional configuration, the helper(s) will simply return whatever `$_SERVER['REMOTE_ADDR']` reports (But 
 sanitised and validated as an actual IP address). The reason you're looking at this is probably because `REMOTE_ADDR` 
-doesn't cut it… The options are detailed in [`./src/ConfigProvider.php`]() and repeated below. The values are the defaults.
+doesn't cut it… The options are detailed in [`./src/ConfigProvider.php`](https://github.com/netglue/RealIP-Helpers/blob/master/src/ConfigProvider.php) and repeated below. The values are the defaults.
 
 ```php
 return [
