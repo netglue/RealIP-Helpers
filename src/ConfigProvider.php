@@ -16,11 +16,15 @@ class ConfigProvider
 
     public function getDependencies() : array
     {
+        // @codingStandardsIgnoreStart
         return [
-            Helper\ClientIPFromPsrServerRequest::class => Container\Helper\ClientIPFromPsrServerRequestFactory::class,
-            Helper\ClientIPFromSuperGlobals::class => Container\Helper\ClientIPFromSuperGlobalsFactory::class,
-            Middleware\IpAddress::class => Container\Middleware\IpAddressFactory::class,
+            'factories' => [
+                Helper\ClientIPFromPsrServerRequest::class => Container\Helper\ClientIPFromPsrServerRequestFactory::class,
+                Helper\ClientIPFromSuperGlobals::class     => Container\Helper\ClientIPFromSuperGlobalsFactory::class,
+                Middleware\IpAddress::class                => Container\Middleware\IpAddressFactory::class,
+            ],
         ];
+        // @codingStandardsIgnoreEnd
     }
 
     public function getZendMvcControllerPluginConfig() : array
@@ -28,7 +32,10 @@ class ConfigProvider
         return [
             'factories' => [
                 ZendMvc\Controller\Plugin\ClientIP::class => Container\ZendMvc\Controller\Plugin\ClientIPFactory::class,
-            ]
+            ],
+            'aliases' => [
+                'clientIp' => ZendMvc\Controller\Plugin\ClientIP::class
+            ],
         ];
     }
 
