@@ -1,33 +1,29 @@
 <?php
 declare(strict_types=1);
 
-namespace NetglueGeoIPTest\Helper;
+namespace NetglueRealIPTest\Helper;
 
+use Laminas\Diactoros\ServerRequestFactory;
 use NetglueRealIP\Helper\ClientIPFromPsrServerRequest;
 use NetglueRealIPTest\TestCase;
-use Zend\Diactoros\ServerRequestFactory;
 
 class ClientIpFromPsrServerRequestTest extends TestCase
 {
-    public function testGetRemoteAddress()
+    public function testGetRemoteAddress() : void
     {
-        $request = ServerRequestFactory::fromGlobals([
-            'REMOTE_ADDR' => '1.1.1.1',
-        ]);
-        $helper = new ClientIPFromPsrServerRequest;
+        $request = ServerRequestFactory::fromGlobals(['REMOTE_ADDR' => '1.1.1.1']);
+        $helper = new ClientIPFromPsrServerRequest();
         $this->assertSame('1.1.1.1', $helper($request));
     }
 
-    public function testPortIsStrippedFromRemoteAddress()
+    public function testPortIsStrippedFromRemoteAddress() : void
     {
-        $request = ServerRequestFactory::fromGlobals([
-            'REMOTE_ADDR' => '1.1.1.1:1234',
-        ]);
-        $helper = new ClientIPFromPsrServerRequest;
+        $request = ServerRequestFactory::fromGlobals(['REMOTE_ADDR' => '1.1.1.1:1234']);
+        $helper = new ClientIPFromPsrServerRequest();
         $this->assertSame('1.1.1.1', $helper($request));
     }
 
-    public function testHeaderRetrieval()
+    public function testHeaderRetrieval() : void
     {
         $request = ServerRequestFactory::fromGlobals([
             'REMOTE_ADDR' => '1.1.1.1:1234',

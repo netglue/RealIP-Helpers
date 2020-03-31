@@ -3,6 +3,9 @@ declare(strict_types=1);
 
 namespace NetglueRealIPTest\Middleware;
 
+use Laminas\Diactoros\Response;
+use Laminas\Diactoros\ServerRequest;
+use Laminas\Diactoros\ServerRequestFactory;
 use NetglueRealIP\Container\Middleware\IpAddressFactory;
 use NetglueRealIP\Helper\ClientIPFromPsrServerRequest;
 use NetglueRealIP\Middleware\IpAddress;
@@ -11,16 +14,16 @@ use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use Zend\Diactoros\Response;
-use Zend\Diactoros\ServerRequestFactory;
 
 class IpAddressTest extends TestCase
 {
+    /** @var mixed[] */
     private $serverArray;
 
+    /** @var ServerRequest */
     private $request;
 
-    public function setUp()
+    protected function setUp() : void
     {
         parent::setUp();
         $this->serverArray = $_SERVER;
@@ -29,21 +32,22 @@ class IpAddressTest extends TestCase
         $this->request = ServerRequestFactory::fromGlobals($_SERVER);
     }
 
-    public function tearDown()
+    protected function tearDown() : void
     {
         parent::tearDown();
         $_SERVER = $this->serverArray;
     }
 
-    public function testBasic()
+    public function testBasic() : void
     {
         $helper = new ClientIPFromPsrServerRequest();
         $middleware = new IpAddress($helper);
         $handler = (new class implements RequestHandlerInterface {
-            public function handle(ServerRequestInterface $request): ResponseInterface
+            public function handle(ServerRequestInterface $request) : ResponseInterface
             {
                 $response = new Response();
                 $response->getBody()->write($request->getAttribute('ip_address'));
+
                 return $response;
             }
         });
@@ -51,15 +55,16 @@ class IpAddressTest extends TestCase
         $this->assertSame('1.1.1.1', (string) $response->getBody());
     }
 
-    public function testAttributeCanBeRenamed()
+    public function testAttributeCanBeRenamed() : void
     {
         $helper = new ClientIPFromPsrServerRequest();
         $middleware = new IpAddress($helper, 'Whatever');
         $handler = (new class implements RequestHandlerInterface {
-            public function handle(ServerRequestInterface $request): ResponseInterface
+            public function handle(ServerRequestInterface $request) : ResponseInterface
             {
                 $response = new Response();
                 $response->getBody()->write($request->getAttribute('Whatever'));
+
                 return $response;
             }
         });
@@ -67,10 +72,10 @@ class IpAddressTest extends TestCase
         $this->assertSame('1.1.1.1', (string) $response->getBody());
     }
 
-    public function testFactory()
+    public function testFactory() : void
     {
         $container = $this->prophesize(ContainerInterface::class);
-        $container->get(ClientIPFromPsrServerRequest::class)->willReturn(new ClientIPFromPsrServerRequest);
+        $container->get(ClientIPFromPsrServerRequest::class)->willReturn(new ClientIPFromPsrServerRequest());
 
         $factory = new IpAddressFactory();
         $middleware = $factory($container->reveal());

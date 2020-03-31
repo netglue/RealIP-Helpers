@@ -1,60 +1,58 @@
 <?php
 declare(strict_types=1);
 
-namespace NetglueGeoIPTest\Helper;
+namespace NetglueRealIPTest\Helper;
 
 use NetglueRealIP\Helper\ClientIPFromSuperGlobals;
 use NetglueRealIPTest\TestCase;
 
 class ClientIPFromSuperGlobalsTest extends TestCase
 {
+    /** @var mixed[] */
     private static $preservedServer;
 
-
-    public function tearDown()
+    protected function tearDown() : void
     {
         parent::tearDown();
         $_SERVER = self::$preservedServer;
     }
 
-    public function setUp()
+    protected function setUp() : void
     {
         parent::setUp();
         self::$preservedServer = $_SERVER;
-        $_SERVER = [
-            'REMOTE_ADDR' => '1.1.1.1'
-        ];
+        $_SERVER = ['REMOTE_ADDR' => '1.1.1.1'];
     }
 
-    public function testNullReturnedWhenThereIsNoRemoteAddr()
+    public function testNullReturnedWhenThereIsNoRemoteAddr() : void
     {
         unset($_SERVER['REMOTE_ADDR']);
-        $helper = new ClientIPFromSuperGlobals;
+        $helper = new ClientIPFromSuperGlobals();
         $this->assertNull($helper());
     }
 
-    public function testRemoteAddressIsReturnedByDefault()
+    public function testRemoteAddressIsReturnedByDefault() : void
     {
         $_SERVER['HTTP_X_FORWARDED_FOR'] = '3.3.3.3, 2.2.2.2';
-        $helper = new ClientIPFromSuperGlobals;
+        $helper = new ClientIPFromSuperGlobals();
         $this->assertSame('1.1.1.1', $helper());
     }
 
-    public function testRemoteAddressPortIsStripped()
+    public function testRemoteAddressPortIsStripped() : void
     {
         $_SERVER['REMOTE_ADDR'] = '1.1.1.1:80';
-        $helper = new ClientIPFromSuperGlobals;
+        $helper = new ClientIPFromSuperGlobals();
         $this->assertSame('1.1.1.1', $helper());
     }
 
-    public function testInvalidRemoteAddressIsNull()
+    public function testInvalidRemoteAddressIsNull() : void
     {
         $_SERVER['REMOTE_ADDR'] = 'whatever';
-        $helper = new ClientIPFromSuperGlobals;
+        $helper = new ClientIPFromSuperGlobals();
         $this->assertNull($helper());
     }
 
-    public function testTrustedHeaderTrumpsRemoteAddr()
+    public function testTrustedHeaderTrumpsRemoteAddr() : void
     {
         $_SERVER['HTTP_X_FORWARDED_FOR'] = '3.3.3.3, 2.2.2.2';
         $_SERVER['HTTP_CF_CONNECTING_IP'] = '4.4.4.4';
@@ -62,55 +60,56 @@ class ClientIPFromSuperGlobalsTest extends TestCase
         $this->assertSame('4.4.4.4', $helper());
     }
 
-    public function testProxyModeReturnsLeftMostIpWithNoTrustedProxies()
+    public function testProxyModeReturnsLeftMostIpWithNoTrustedProxies() : void
     {
         $_SERVER['HTTP_X_FORWARDED_FOR'] = '3.3.3.3, 2.2.2.2';
         $helper = new ClientIPFromSuperGlobals(true);
         $this->assertSame('3.3.3.3', $helper());
     }
 
-    public function testProxyModeReturnsRightMostIpWithTrustedProxies()
+    public function testProxyModeReturnsRightMostIpWithTrustedProxies() : void
     {
         $_SERVER['HTTP_X_FORWARDED_FOR'] = '3.3.3.3, 2.2.2.2';
         $helper = new ClientIPFromSuperGlobals(true, null, true);
         $this->assertSame('2.2.2.2', $helper());
     }
 
-    public function testRemoteAddrIsReturnedWhenThereAreNoProxyHeaders()
+    public function testRemoteAddrIsReturnedWhenThereAreNoProxyHeaders() : void
     {
         $helper = new ClientIPFromSuperGlobals(true);
         $this->assertSame('1.1.1.1', $helper());
     }
 
-    public function testProxyHeadersOverrideDefaults()
+    public function testProxyHeadersOverrideDefaults() : void
     {
         $_SERVER['HTTP_X_FORWARDED_FOR'] = '3.3.3.3, 2.2.2.2';
         $_SERVER['HTTP_X_FOO'] = '9.9.9.9';
-        $helper = new ClientIPFromSuperGlobals(true, null, false, null, ['x-foo']);
+        $helper = new ClientIPFromSuperGlobals(true, null, false, [], ['x-foo']);
         $this->assertSame('9.9.9.9', $helper());
     }
 
-    public function testInvalidIpsAreExcludedFromHeaders()
+    public function testInvalidIpsAreExcludedFromHeaders() : void
     {
         $_SERVER['HTTP_X_FORWARDED_FOR'] = 'foo, 3.3.3.3, bunnies, 2.2.2.2, 5.5.5';
         $helper = new ClientIPFromSuperGlobals(true);
         $this->assertSame('3.3.3.3', $helper());
     }
 
-    public function testIPV4PortNumberIsRemoved()
+    public function testIPV4PortNumberIsRemoved() : void
     {
         $_SERVER['HTTP_X_FORWARDED_FOR'] = '3.3.3.3:1234, 2.2.2.2:1234';
         $helper = new ClientIPFromSuperGlobals(true);
         $this->assertSame('3.3.3.3', $helper());
     }
 
-    public function testIPV6PortNumberIsRemoved()
+    public function testIPV6PortNumberIsRemoved() : void
     {
         $_SERVER['HTTP_X_FORWARDED_FOR'] = '[2606:4700:4700::1111]:1234, [2606:4700:4700::1001]:1234';
         $helper = new ClientIPFromSuperGlobals(true);
         $this->assertSame('2606:4700:4700::1111', $helper());
     }
 
+    /** @return mixed[] */
     public function fwdForDataProvider() : array
     {
         return [
@@ -124,16 +123,15 @@ class ClientIPFromSuperGlobalsTest extends TestCase
 
     /**
      * @dataProvider fwdForDataProvider
-     * @param string $header
-     * @param string $expect
      */
-    public function testForwardedHeaderIP(string $header, string $expect)
+    public function testForwardedHeaderIP(string $header, string $expect) : void
     {
         $_SERVER['HTTP_FORWARDED'] = $header;
         $helper = new ClientIPFromSuperGlobals(true);
         $this->assertSame($expect, $helper());
     }
 
+    /** @return mixed[] */
     public function trustedDataProvider() : array
     {
         return [
@@ -144,10 +142,8 @@ class ClientIPFromSuperGlobalsTest extends TestCase
 
     /**
      * @dataProvider trustedDataProvider
-     * @param string $header
-     * @param string $expect
      */
-    public function testTrustedProxies(string $header, string $expect)
+    public function testTrustedProxies(string $header, string $expect) : void
     {
         $trusted = [
             '3.3.3.3',
@@ -161,9 +157,8 @@ class ClientIPFromSuperGlobalsTest extends TestCase
 
     /**
      * @dataProvider trustedDataProvider
-     * @param string $header
      */
-    public function testRemoteAddrIsClientWhenNotATrustedProxy(string $header)
+    public function testRemoteAddrIsClientWhenNotATrustedProxy(string $header) : void
     {
         $expect = '1.1.1.1';
         $trusted = [

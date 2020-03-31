@@ -1,5 +1,6 @@
 {
     "name": "netglue/realip-helpers",
+    "description": "PSR-15 Middleware for detecting the real client ip amongst other helpers.",
     "type": "library",
     "license": "MIT",
     "authors" : [
@@ -10,27 +11,30 @@
         }
     ],
     "require": {
-        "php": ">=7.1",
+        "php": ">=7.3",
         "psr/container": "^1.0",
         "psr/http-server-middleware": "^1.0",
         "psr/http-server-handler": "^1.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "^7",
-        "phpstan/phpstan": "^0",
-        "squizlabs/php_codesniffer": "^3",
+        "doctrine/coding-standard": "^7.0",
+        "laminas/laminas-diactoros": "^2.2",
+        "laminas/laminas-modulemanager": "^2.8",
+        "laminas/laminas-mvc": "^3.1",
         "php-coveralls/php-coveralls": "^2",
-        "zendframework/zend-mvc": "^3.1",
-        "zendframework/zend-diactoros": "^1.8",
-        "zendframework/zend-modulemanager": "^2.8"
+        "phpstan/phpstan": "^0",
+        "phpunit/phpunit": "^9",
+        "roave/security-advisories": "dev-master",
+        "squizlabs/php_codesniffer": "^3"
     },
     "suggest" : {
-        "zendframework/zend-mvc": "Install Zend-MVC in order to use this with a ZF3 app",
-        "zendframework/zend-diactoros": "Install a PSR-15 middleware implementation"
+        "laminas/laminas-mvc": "Install Laminas MVC in order to use this with a ZF3 app",
+        "laminas/laminas-diactoros": "Install a PSR-15 middleware implementation"
     },
     "config" : {
         "minimum-stability" : "stable",
-        "prefer-stable" : true
+        "prefer-stable" : true,
+        "sort-packages": true
     },
     "autoload" : {
         "psr-4" : {
@@ -55,7 +59,7 @@
         "upload-coverage": "php-coveralls -v"
     },
     "extra": {
-        "zf": {
+        "laminas": {
             "module": "NetglueRealIP",
             "config-provider": "NetglueRealIP\\ConfigProvider"
         }
