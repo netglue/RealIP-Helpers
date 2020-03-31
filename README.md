@@ -1,10 +1,8 @@
-# Helpers for retrieving the real client IP in Zend Projects
+# Helpers for retrieving the real client IP in Laminas/Mezzio Projects
 
 [![Latest Stable Version](https://poser.pugx.org/netglue/realip-helpers/version)](https://packagist.org/packages/netglue/realip-helpers)
-[![Coverage Status](https://coveralls.io/repos/github/netglue/RealIP-Helpers/badge.svg)](https://coveralls.io/github/netglue/RealIP-Helpers)
-[![Build Status](https://travis-ci.org/netglue/RealIP-Helpers.svg?branch=master)](https://travis-ci.org/netglue/RealIP-Helpers)
-[![Maintainability](https://api.codeclimate.com/v1/badges/1b1d79eb6c32e717413c/maintainability)](https://codeclimate.com/github/netglue/RealIP-Helpers/maintainability)
-[![Test Coverage](https://api.codeclimate.com/v1/badges/1b1d79eb6c32e717413c/test_coverage)](https://codeclimate.com/github/netglue/RealIP-Helpers/test_coverage)
+[![codecov](https://codecov.io/gh/netglue/RealIP-Helpers/branch/master/graph/badge.svg)](https://codecov.io/gh/netglue/RealIP-Helpers)
+![PHPUnit Test Suite](https://github.com/netglue/RealIP-Helpers/workflows/PHPUnit%20Test%20Suite/badge.svg)
 
 ## Why?
 
