@@ -5,6 +5,7 @@ namespace NetglueRealIP;
 
 class ConfigProvider
 {
+    /** @return mixed[] */
     public function __invoke() : array
     {
         return [
@@ -14,6 +15,7 @@ class ConfigProvider
         ];
     }
 
+    /** @return mixed[] */
     public function getDependencies() : array
     {
         // @codingStandardsIgnoreStart
@@ -27,6 +29,7 @@ class ConfigProvider
         // @codingStandardsIgnoreEnd
     }
 
+    /** @return mixed[] */
     public function getZendMvcControllerPluginConfig() : array
     {
         // @codingStandardsIgnoreStart
@@ -41,6 +44,7 @@ class ConfigProvider
         // @codingStandardsIgnoreEnd
     }
 
+    /** @return mixed[] */
     public function getProxyHeaderSetup() : array
     {
         return [

@@ -12,26 +12,30 @@ use function explode;
 use function filter_var;
 use function in_array;
 use function reset;
+use function stripos;
 use function strpos;
 use function strtolower;
 use function substr;
 use function trim;
+use const FILTER_FLAG_IPV4;
+use const FILTER_FLAG_IPV6;
+use const FILTER_VALIDATE_IP;
 
 abstract class ClientIP
 {
     /** @var bool Whether to evaluate proxy headers or not */
-    private $proxyMode = false;
+    private $proxyMode;
 
     /** @var string|null A header that we’re trusting to contain the real client IP */
     private $trustedHeader;
 
-    /** @var array An array of trusted proxy IP addresses */
+    /** @var string[] An array of trusted proxy IP addresses */
     private $trustedProxies = [];
 
     /** @var bool Whether the Remote Address is guaranteed to be a trusted proxy */
-    private $remoteAddressIsTrustedProxy = false;
+    private $remoteAddressIsTrustedProxy;
 
-    /** @var array */
+    /** @var string[] */
     private $proxyHeadersToInspect = [
         'Forwarded',
         'X-Forwarded-For',
@@ -40,22 +44,28 @@ abstract class ClientIP
         'Client-Ip',
     ];
 
+    /**
+     * @param string[] $trustedProxies
+     * @param string[] $proxyHeadersToInspect
+     */
     public function __construct(
         bool $proxyMode = false,
         ?string $trustedHeader = null,
         bool $remoteAddressIsTrustedProxy = false,
-        ?array $trustedProxies = null,
-        ?array $proxyHeadersToInspect = null
+        array $trustedProxies = [],
+        array $proxyHeadersToInspect = []
     ) {
-        $this->proxyMode     = $proxyMode;
-        $this->trustedHeader = $trustedHeader;
-        $this->remoteAddressIsTrustedProxy = $remoteAddressIsTrustedProxy;
         if (! empty($trustedProxies)) {
             $this->trustedProxies = $trustedProxies;
         }
+
         if (! empty($proxyHeadersToInspect)) {
             $this->proxyHeadersToInspect = $proxyHeadersToInspect;
         }
+
+        $this->proxyMode = $proxyMode;
+        $this->trustedHeader = $trustedHeader;
+        $this->remoteAddressIsTrustedProxy = $remoteAddressIsTrustedProxy;
     }
 
     public function getIpAddress() :? string
@@ -65,6 +75,7 @@ abstract class ClientIP
         if ($ip) {
             return $ip;
         }
+
         // Just return REMOTE_ADDR if proxies are not to be checked
         $remote = $this->getRemoteAddress();
         if (! $this->proxyMode) {
@@ -77,7 +88,7 @@ abstract class ClientIP
         }
 
         // If REMOTE_ADDR is not a trusted proxy, it's the client
-        if (count($this->trustedProxies) && ! in_array($remote, $this->trustedProxies)) {
+        if (count($this->trustedProxies) && ! in_array($remote, $this->trustedProxies, true)) {
             return $remote;
         }
 
@@ -96,13 +107,16 @@ abstract class ClientIP
                 // The client IP is the left-most address, but when the all trusted proxies are removed,
                 // the most trusted source of information would be the right most.
                 $ips = array_diff($ips, $this->trustedProxies);
+
                 return end($ips);
             }
+
             // There are no trusted proxies, so assume the left-most is the client
             if (! empty($ips)) {
                 return reset($ips);
             }
         }
+
         return $this->getRemoteAddress();
     }
 
@@ -114,6 +128,7 @@ abstract class ClientIP
                 return $this->filterIp($value);
             }
         }
+
         return null;
     }
 
@@ -123,9 +138,11 @@ abstract class ClientIP
         if (! $this->validateIp($ip)) {
             return null;
         }
+
         return $ip;
     }
 
+    /** @return string[] */
     private function proxyHeaderToArray(string $headerName) : array
     {
         $headerValue = $this->getHeaderValue($headerName);
@@ -137,9 +154,9 @@ abstract class ClientIP
 
         if (strtolower($headerName) === 'forwarded') {
             foreach (explode(';', $headerValue) as $headerPart) {
-                if (strtolower(substr($headerPart, 0, 4)) === 'for=') {
+                if (stripos($headerPart, 'for=') === 0) {
                     $items = explode(',', $headerPart);
-                    $items = array_map(function ($value) {
+                    $items = array_map(static function ($value) : string {
                         // IPv6 is quoted: For="[2001:db8:cafe::17]:4711"
                         return trim(trim(substr($value, 4)), '"');
                     }, $items);
@@ -162,11 +179,10 @@ abstract class ClientIP
                 return $parts[0];
             }
         }
+
         $parts = explode(':', $ipAddress);
-        if (count($parts) == 2) {
-            if (filter_var($parts[0], FILTER_VALIDATE_IP, FILTER_FLAG_IPV4) !== false) {
-                return $parts[0];
-            }
+        if ((count($parts) === 2) && filter_var($parts[0], FILTER_VALIDATE_IP, FILTER_FLAG_IPV4) !== false) {
+            return $parts[0];
         }
 
         return $ipAddress;
@@ -175,6 +191,7 @@ abstract class ClientIP
     private function validateIp(string $ip) : bool
     {
         $flags = FILTER_FLAG_IPV4 | FILTER_FLAG_IPV6;
+
         return ! (filter_var($ip, FILTER_VALIDATE_IP, $flags) === false);
     }
 }

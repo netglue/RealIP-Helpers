@@ -11,7 +11,7 @@ use Psr\Container\ContainerInterface;
 
 class ClientIPFromPsrServerRequestFactoryTest extends TestCase
 {
-    public function testConfigProviderHasReasonableDefaults()
+    public function testConfigProviderHasReasonableDefaults() : void
     {
         $config = (new ConfigProvider())();
         $container = $this->prophesize(ContainerInterface::class);

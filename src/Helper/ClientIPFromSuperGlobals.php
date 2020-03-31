@@ -9,15 +9,14 @@ use function strtoupper;
 
 class ClientIPFromSuperGlobals extends ClientIP
 {
-
-    /**
-     * @var array Effectively $_SERVER
-     */
+    /** @var mixed[] Effectively $_SERVER*/
     public $serverArray;
 
+    /** @param mixed[] $serverArray */
     public function __invoke(?array $serverArray = null) :? string
     {
         $this->serverArray = empty($serverArray) ? $_SERVER : $serverArray;
+
         return $this->getIpAddress();
     }
 
@@ -31,18 +30,18 @@ class ClientIPFromSuperGlobals extends ClientIP
     protected function getHeaderValue(string $headerName) :? string
     {
         $headerName = $this->normaliseHeaderFromSuperGlobal($headerName);
-        return isset($this->serverArray[$headerName])
-            ? $this->serverArray[$headerName]
-            : null;
+
+        return $this->serverArray[$headerName] ?? null;
     }
 
     private function normaliseHeaderFromSuperGlobal(string $header) : string
     {
         $header = strtoupper($header);
         $header = str_replace('-', '_', $header);
-        if (0 !== strpos($header, 'HTTP_')) {
+        if (strpos($header, 'HTTP_') !== 0) {
             $header = 'HTTP_' . $header;
         }
+
         return $header;
     }
 }

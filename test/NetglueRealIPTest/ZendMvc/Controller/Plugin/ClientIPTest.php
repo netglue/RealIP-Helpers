@@ -11,30 +11,30 @@ use Psr\Container\ContainerInterface;
 
 class ClientIPTest extends TestCase
 {
-
+    /** @var mixed[] */
     private $serverArray;
 
-    public function setUp()
+    protected function setUp() : void
     {
         parent::setUp();
         $this->serverArray = $_SERVER;
         $_SERVER['REMOTE_ADDR'] = '1.1.1.1';
     }
 
-    public function tearDown()
+    protected function tearDown() : void
     {
         parent::tearDown();
         $_SERVER = $this->serverArray;
     }
 
-    public function testBasicOperation()
+    public function testBasicOperation() : void
     {
         $helper = new ClientIPFromSuperGlobals();
         $plugin = new ClientIP($helper);
         $this->assertSame('1.1.1.1', $plugin());
     }
 
-    public function testFactory()
+    public function testFactory() : void
     {
         $container = $this->prophesize(ContainerInterface::class);
         $container->get(ClientIPFromSuperGlobals::class)->willReturn(new ClientIPFromSuperGlobals());

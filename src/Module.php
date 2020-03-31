@@ -3,13 +3,13 @@ declare(strict_types=1);
 
 namespace NetglueRealIP;
 
-use Zend\ModuleManager\Feature\ConfigProviderInterface;
-use Zend\ModuleManager\Feature\ControllerPluginProviderInterface;
-use Zend\ModuleManager\Feature\ServiceProviderInterface;
+use Laminas\ModuleManager\Feature\ConfigProviderInterface;
+use Laminas\ModuleManager\Feature\ControllerPluginProviderInterface;
+use Laminas\ModuleManager\Feature\ServiceProviderInterface;
 
 class Module implements ServiceProviderInterface, ControllerPluginProviderInterface, ConfigProviderInterface
 {
-
+    /** @var ConfigProvider */
     private $configProvider;
 
     public function __construct()
@@ -17,18 +17,21 @@ class Module implements ServiceProviderInterface, ControllerPluginProviderInterf
         $this->configProvider = new ConfigProvider();
     }
 
+    /** @return mixed[] */
     public function getConfig() : array
     {
         return [
-            'proxy_headers' => $this->configProvider->getProxyHeaderSetup()
+            'proxy_headers' => $this->configProvider->getProxyHeaderSetup(),
         ];
     }
 
+    /** @return mixed[] */
     public function getControllerPluginConfig() : array
     {
         return $this->configProvider->getZendMvcControllerPluginConfig();
     }
 
+    /** @return mixed[] */
     public function getServiceConfig() : array
     {
         return $this->configProvider->getDependencies();

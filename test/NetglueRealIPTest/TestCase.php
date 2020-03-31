@@ -3,7 +3,8 @@ declare(strict_types=1);
 
 namespace NetglueRealIPTest;
 
-class TestCase extends \PHPUnit\Framework\TestCase
-{
+use PHPUnit\Framework\TestCase as PHPUnitTestCase;
 
+class TestCase extends PHPUnitTestCase
+{
 }

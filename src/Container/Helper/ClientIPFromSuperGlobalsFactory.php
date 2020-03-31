@@ -16,6 +16,7 @@ class ClientIPFromSuperGlobalsFactory
         $remoteAddressIsTrustedProxy = $config['remoteAddressIsTrustedProxy'];
         $trustedProxies              = $config['trustedProxies'];
         $proxyHeadersToInspect       = $config['proxyHeadersToInspect'];
+
         return new ClientIPFromSuperGlobals(
             $checkProxyHeaders,
             $trustedHeader,

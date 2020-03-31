@@ -16,6 +16,7 @@ class ClientIPFromPsrServerRequestFactory
         $remoteAddressIsTrustedProxy = $config['remoteAddressIsTrustedProxy'];
         $trustedProxies              = $config['trustedProxies'];
         $proxyHeadersToInspect       = $config['proxyHeadersToInspect'];
+
         return new ClientIPFromPsrServerRequest(
             $checkProxyHeaders,
             $trustedHeader,

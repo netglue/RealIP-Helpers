@@ -11,7 +11,6 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 class IpAddress implements MiddlewareInterface
 {
-
     public const ATTRIBUTE = 'ip_address';
 
     /** @var ClientIPFromPsrServerRequest */
@@ -32,6 +31,7 @@ class IpAddress implements MiddlewareInterface
     {
         $ip = ($this->helper)($request);
         $request = $request->withAttribute($this->attribute, $ip);
+
         return $handler->handle($request);
     }
 }

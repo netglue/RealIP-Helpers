@@ -8,11 +8,11 @@ use PHPUnit\Framework\TestCase;
 
 class ModuleTest extends TestCase
 {
-    public function testBasic()
+    public function testBasic() : void
     {
         $module = new Module();
-        $this->assertInternalType('array', $module->getServiceConfig());
-        $this->assertInternalType('array', $module->getConfig());
-        $this->assertInternalType('array', $module->getControllerPluginConfig());
+        $this->assertIsArray($module->getServiceConfig());
+        $this->assertIsArray($module->getConfig());
+        $this->assertIsArray($module->getControllerPluginConfig());
     }
 }
