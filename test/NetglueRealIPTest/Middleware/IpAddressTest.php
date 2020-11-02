@@ -53,7 +53,7 @@ class IpAddressTest extends TestCase
             }
         });
         $response = $middleware->process($this->request, $handler);
-        $this->assertSame('1.1.1.1', (string) $response->getBody());
+        self::assertSame('1.1.1.1', (string) $response->getBody());
     }
 
     public function testAttributeCanBeRenamed(): void
@@ -70,16 +70,19 @@ class IpAddressTest extends TestCase
             }
         });
         $response = $middleware->process($this->request, $handler);
-        $this->assertSame('1.1.1.1', (string) $response->getBody());
+        self::assertSame('1.1.1.1', (string) $response->getBody());
     }
 
     public function testFactory(): void
     {
-        $container = $this->prophesize(ContainerInterface::class);
-        $container->get(ClientIPFromPsrServerRequest::class)->willReturn(new ClientIPFromPsrServerRequest());
+        $container = $this->createMock(ContainerInterface::class);
+        $container->expects(self::once())
+            ->method('get')
+            ->with(ClientIPFromPsrServerRequest::class)
+            ->willReturn(new ClientIPFromPsrServerRequest());
 
         $factory = new IpAddressFactory();
-        $middleware = $factory($container->reveal());
-        $this->assertInstanceOf(IpAddress::class, $middleware);
+        $middleware = $factory($container);
+        self::assertInstanceOf(IpAddress::class, $middleware);
     }
 }

@@ -15,11 +15,14 @@ class ClientIPFromSuperGlobalsFactoryTest extends TestCase
     public function testConfigProviderHasReasonableDefaults(): void
     {
         $config = (new ConfigProvider())();
-        $container = $this->prophesize(ContainerInterface::class);
-        $container->get('config')->willReturn($config);
+        $container = $this->createMock(ContainerInterface::class);
+        $container->expects(self::once())
+            ->method('get')
+            ->with('config')
+            ->willReturn($config);
 
         $factory = new ClientIPFromSuperGlobalsFactory();
-        $helper = $factory($container->reveal());
-        $this->assertInstanceOf(ClientIPFromSuperGlobals::class, $helper);
+        $helper = $factory($container);
+        self::assertInstanceOf(ClientIPFromSuperGlobals::class, $helper);
     }
 }

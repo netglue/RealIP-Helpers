@@ -32,15 +32,19 @@ class ClientIPTest extends TestCase
     {
         $helper = new ClientIPFromSuperGlobals();
         $plugin = new ClientIP($helper);
-        $this->assertSame('1.1.1.1', $plugin());
+        self::assertSame('1.1.1.1', $plugin());
     }
 
     public function testFactory(): void
     {
-        $container = $this->prophesize(ContainerInterface::class);
-        $container->get(ClientIPFromSuperGlobals::class)->willReturn(new ClientIPFromSuperGlobals());
+        $container = $this->createMock(ContainerInterface::class);
+        $container->expects(self::once())
+            ->method('get')
+            ->with(ClientIPFromSuperGlobals::class)
+            ->willReturn(new ClientIPFromSuperGlobals());
+
         $factory = new ClientIpPluginFactory();
-        $plugin = $factory($container->reveal());
-        $this->assertInstanceOf(ClientIP::class, $plugin);
+        $plugin = $factory($container);
+        self::assertInstanceOf(ClientIP::class, $plugin);
     }
 }
