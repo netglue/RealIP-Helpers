@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace NetglueRealIPTest;
@@ -8,7 +9,7 @@ use PHPUnit\Framework\TestCase;
 
 class ModuleTest extends TestCase
 {
-    public function testBasic() : void
+    public function testBasic(): void
     {
         $module = new Module();
         $this->assertIsArray($module->getServiceConfig());

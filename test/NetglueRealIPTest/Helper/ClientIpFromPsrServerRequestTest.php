@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace NetglueRealIPTest\Helper;
@@ -9,21 +10,21 @@ use NetglueRealIPTest\TestCase;
 
 class ClientIpFromPsrServerRequestTest extends TestCase
 {
-    public function testGetRemoteAddress() : void
+    public function testGetRemoteAddress(): void
     {
         $request = ServerRequestFactory::fromGlobals(['REMOTE_ADDR' => '1.1.1.1']);
         $helper = new ClientIPFromPsrServerRequest();
         $this->assertSame('1.1.1.1', $helper($request));
     }
 
-    public function testPortIsStrippedFromRemoteAddress() : void
+    public function testPortIsStrippedFromRemoteAddress(): void
     {
         $request = ServerRequestFactory::fromGlobals(['REMOTE_ADDR' => '1.1.1.1:1234']);
         $helper = new ClientIPFromPsrServerRequest();
         $this->assertSame('1.1.1.1', $helper($request));
     }
 
-    public function testHeaderRetrieval() : void
+    public function testHeaderRetrieval(): void
     {
         $request = ServerRequestFactory::fromGlobals([
             'REMOTE_ADDR' => '1.1.1.1:1234',

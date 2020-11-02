@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace NetglueRealIP;
@@ -18,7 +19,7 @@ class Module implements ServiceProviderInterface, ControllerPluginProviderInterf
     }
 
     /** @return mixed[] */
-    public function getConfig() : array
+    public function getConfig(): array
     {
         return [
             'proxy_headers' => $this->configProvider->getProxyHeaderSetup(),
@@ -26,13 +27,13 @@ class Module implements ServiceProviderInterface, ControllerPluginProviderInterf
     }
 
     /** @return mixed[] */
-    public function getControllerPluginConfig() : array
+    public function getControllerPluginConfig(): array
     {
         return $this->configProvider->getZendMvcControllerPluginConfig();
     }
 
     /** @return mixed[] */
-    public function getServiceConfig() : array
+    public function getServiceConfig(): array
     {
         return $this->configProvider->getDependencies();
     }

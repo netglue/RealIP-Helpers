@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace NetglueRealIPTest\Middleware;
@@ -23,7 +24,7 @@ class IpAddressTest extends TestCase
     /** @var ServerRequest */
     private $request;
 
-    protected function setUp() : void
+    protected function setUp(): void
     {
         parent::setUp();
         $this->serverArray = $_SERVER;
@@ -32,18 +33,18 @@ class IpAddressTest extends TestCase
         $this->request = ServerRequestFactory::fromGlobals($_SERVER);
     }
 
-    protected function tearDown() : void
+    protected function tearDown(): void
     {
         parent::tearDown();
         $_SERVER = $this->serverArray;
     }
 
-    public function testBasic() : void
+    public function testBasic(): void
     {
         $helper = new ClientIPFromPsrServerRequest();
         $middleware = new IpAddress($helper);
         $handler = (new class implements RequestHandlerInterface {
-            public function handle(ServerRequestInterface $request) : ResponseInterface
+            public function handle(ServerRequestInterface $request): ResponseInterface
             {
                 $response = new Response();
                 $response->getBody()->write($request->getAttribute('ip_address'));
@@ -55,12 +56,12 @@ class IpAddressTest extends TestCase
         $this->assertSame('1.1.1.1', (string) $response->getBody());
     }
 
-    public function testAttributeCanBeRenamed() : void
+    public function testAttributeCanBeRenamed(): void
     {
         $helper = new ClientIPFromPsrServerRequest();
         $middleware = new IpAddress($helper, 'Whatever');
         $handler = (new class implements RequestHandlerInterface {
-            public function handle(ServerRequestInterface $request) : ResponseInterface
+            public function handle(ServerRequestInterface $request): ResponseInterface
             {
                 $response = new Response();
                 $response->getBody()->write($request->getAttribute('Whatever'));
@@ -72,7 +73,7 @@ class IpAddressTest extends TestCase
         $this->assertSame('1.1.1.1', (string) $response->getBody());
     }
 
-    public function testFactory() : void
+    public function testFactory(): void
     {
         $container = $this->prophesize(ContainerInterface::class);
         $container->get(ClientIPFromPsrServerRequest::class)->willReturn(new ClientIPFromPsrServerRequest());

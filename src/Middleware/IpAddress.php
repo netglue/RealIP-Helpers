@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace NetglueRealIP\Middleware;
@@ -27,7 +28,7 @@ class IpAddress implements MiddlewareInterface
         $this->attribute = $requestAttribute;
     }
 
-    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler) : ResponseInterface
+    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
         $ip = ($this->helper)($request);
         $request = $request->withAttribute($this->attribute, $ip);

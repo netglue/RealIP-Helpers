@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace NetglueRealIP;
@@ -6,7 +7,7 @@ namespace NetglueRealIP;
 class ConfigProvider
 {
     /** @return mixed[] */
-    public function __invoke() : array
+    public function __invoke(): array
     {
         return [
             'dependencies' => $this->getDependencies(),
@@ -16,7 +17,7 @@ class ConfigProvider
     }
 
     /** @return mixed[] */
-    public function getDependencies() : array
+    public function getDependencies(): array
     {
         // @codingStandardsIgnoreStart
         return [
@@ -30,7 +31,7 @@ class ConfigProvider
     }
 
     /** @return mixed[] */
-    public function getZendMvcControllerPluginConfig() : array
+    public function getZendMvcControllerPluginConfig(): array
     {
         // @codingStandardsIgnoreStart
         return [
@@ -45,7 +46,7 @@ class ConfigProvider
     }
 
     /** @return mixed[] */
-    public function getProxyHeaderSetup() : array
+    public function getProxyHeaderSetup(): array
     {
         return [
             // When figuring out the client IP, should common proxy headers be checked?

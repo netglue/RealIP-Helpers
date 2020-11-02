@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace NetglueRealIP\Container\Helper;
@@ -8,7 +9,7 @@ use Psr\Container\ContainerInterface;
 
 class ClientIPFromSuperGlobalsFactory
 {
-    public function __invoke(ContainerInterface $container) : ClientIPFromSuperGlobals
+    public function __invoke(ContainerInterface $container): ClientIPFromSuperGlobals
     {
         $config = $container->get('config')['proxy_headers'];
         $checkProxyHeaders           = $config['checkProxyHeaders'];

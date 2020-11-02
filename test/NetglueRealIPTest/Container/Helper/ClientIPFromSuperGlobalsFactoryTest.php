@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace NetglueRealIPTest\Container\Helper;
@@ -11,7 +12,7 @@ use Psr\Container\ContainerInterface;
 
 class ClientIPFromSuperGlobalsFactoryTest extends TestCase
 {
-    public function testConfigProviderHasReasonableDefaults() : void
+    public function testConfigProviderHasReasonableDefaults(): void
     {
         $config = (new ConfigProvider())();
         $container = $this->prophesize(ContainerInterface::class);

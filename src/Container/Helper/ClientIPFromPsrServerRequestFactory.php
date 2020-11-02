@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace NetglueRealIP\Container\Helper;
@@ -8,7 +9,7 @@ use Psr\Container\ContainerInterface;
 
 class ClientIPFromPsrServerRequestFactory
 {
-    public function __invoke(ContainerInterface $container) : ClientIPFromPsrServerRequest
+    public function __invoke(ContainerInterface $container): ClientIPFromPsrServerRequest
     {
         $config = $container->get('config')['proxy_headers'];
         $checkProxyHeaders           = $config['checkProxyHeaders'];

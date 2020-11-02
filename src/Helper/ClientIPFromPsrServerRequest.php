@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace NetglueRealIP\Helper;
@@ -10,14 +11,14 @@ class ClientIPFromPsrServerRequest extends ClientIP
     /** @var ServerRequestInterface */
     private $request;
 
-    public function __invoke(ServerRequestInterface $request) :? string
+    public function __invoke(ServerRequestInterface $request): ?string
     {
         $this->request = $request;
 
         return $this->getIpAddress();
     }
 
-    public function getRemoteAddress() :? string
+    public function getRemoteAddress(): ?string
     {
         $server = $this->request->getServerParams();
 
@@ -26,7 +27,7 @@ class ClientIPFromPsrServerRequest extends ClientIP
             : null;
     }
 
-    protected function getHeaderValue(string $headerName) :? string
+    protected function getHeaderValue(string $headerName): ?string
     {
         $headerValue = $this->request->getHeaderLine($headerName);
 

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace NetglueRealIP\ZendMvc\Controller\Plugin;
@@ -16,7 +17,7 @@ class ClientIP extends AbstractPlugin
         $this->helper = $helper;
     }
 
-    public function __invoke() :? string
+    public function __invoke(): ?string
     {
         return ($this->helper)();
     }

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace NetglueRealIP\Helper;
@@ -17,6 +18,7 @@ use function strpos;
 use function strtolower;
 use function substr;
 use function trim;
+
 use const FILTER_FLAG_IPV4;
 use const FILTER_FLAG_IPV6;
 use const FILTER_VALIDATE_IP;
@@ -68,7 +70,7 @@ abstract class ClientIP
         $this->remoteAddressIsTrustedProxy = $remoteAddressIsTrustedProxy;
     }
 
-    public function getIpAddress() :? string
+    public function getIpAddress(): ?string
     {
         // The trusted header trumps everything:
         $ip = $this->getTrustedHeader();
@@ -95,11 +97,11 @@ abstract class ClientIP
         return $this->searchProxyHeaders();
     }
 
-    abstract public function getRemoteAddress() :? string;
+    abstract public function getRemoteAddress(): ?string;
 
-    abstract protected function getHeaderValue(string $headerName) :? string;
+    abstract protected function getHeaderValue(string $headerName): ?string;
 
-    private function searchProxyHeaders() :? string
+    private function searchProxyHeaders(): ?string
     {
         foreach ($this->proxyHeadersToInspect as $headerName) {
             $ips = $this->proxyHeaderToArray($headerName);
@@ -120,7 +122,7 @@ abstract class ClientIP
         return $this->getRemoteAddress();
     }
 
-    private function getTrustedHeader() :? string
+    private function getTrustedHeader(): ?string
     {
         if ($this->trustedHeader) {
             $value = $this->getHeaderValue($this->trustedHeader);
@@ -132,7 +134,7 @@ abstract class ClientIP
         return null;
     }
 
-    public function filterIp(string $ip) :? string
+    public function filterIp(string $ip): ?string
     {
         $ip = $this->removePort($ip);
         if (! $this->validateIp($ip)) {
@@ -143,7 +145,7 @@ abstract class ClientIP
     }
 
     /** @return string[] */
-    private function proxyHeaderToArray(string $headerName) : array
+    private function proxyHeaderToArray(string $headerName): array
     {
         $headerValue = $this->getHeaderValue($headerName);
         if (! $headerValue) {
@@ -156,7 +158,7 @@ abstract class ClientIP
             foreach (explode(';', $headerValue) as $headerPart) {
                 if (stripos($headerPart, 'for=') === 0) {
                     $items = explode(',', $headerPart);
-                    $items = array_map(static function ($value) : string {
+                    $items = array_map(static function ($value): string {
                         // IPv6 is quoted: For="[2001:db8:cafe::17]:4711"
                         return trim(trim(substr($value, 4)), '"');
                     }, $items);
@@ -170,7 +172,7 @@ abstract class ClientIP
         return array_filter($items);
     }
 
-    private function removePort(string $ipAddress) : string
+    private function removePort(string $ipAddress): string
     {
         if (strpos($ipAddress, ']:') !== false) {
             $parts = explode(']', $ipAddress);
@@ -188,7 +190,7 @@ abstract class ClientIP
         return $ipAddress;
     }
 
-    private function validateIp(string $ip) : bool
+    private function validateIp(string $ip): bool
     {
         $flags = FILTER_FLAG_IPV4 | FILTER_FLAG_IPV6;
 

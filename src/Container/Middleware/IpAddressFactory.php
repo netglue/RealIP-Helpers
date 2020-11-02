@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace NetglueRealIP\Container\Middleware;
@@ -9,7 +10,7 @@ use Psr\Container\ContainerInterface;
 
 class IpAddressFactory
 {
-    public function __invoke(ContainerInterface $container) : IpAddress
+    public function __invoke(ContainerInterface $container): IpAddress
     {
         return new IpAddress($container->get(ClientIPFromPsrServerRequest::class));
     }
