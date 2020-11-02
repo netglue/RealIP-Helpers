@@ -21,7 +21,6 @@
         "laminas/laminas-diactoros": "^2.2",
         "laminas/laminas-modulemanager": "^2.8",
         "laminas/laminas-mvc": "^3.1",
-        "php-coveralls/php-coveralls": "^2",
         "phpstan/phpstan": "^0",
         "phpunit/phpunit": "^9",
         "roave/security-advisories": "dev-master",
